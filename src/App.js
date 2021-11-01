@@ -2,7 +2,6 @@ import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Landing from './components/Landing.jsx';
 import Instructions from './components/Instructions.jsx';
-// import './board.css';
 import Board from './components/board.jsx';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
