@@ -13,7 +13,7 @@ export function Square(props){
     const dispatch = useDispatch();
     const listVisitedSquares = useSelector(state => state.BoardReducer.clickedSquares);
     let colorClass = 'box';
-    //change this to onhover event next
+    
     if(listVisitedSquares.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
            colorClass  = 'clickedBox';
     }
@@ -24,6 +24,8 @@ export function Square(props){
     }
 
     return(
+            //change to include  onhover event next
+
      <td className={colorClass} id={props.id} onClick={handleClick}></td>
     )
     
