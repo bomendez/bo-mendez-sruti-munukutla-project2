@@ -1,11 +1,8 @@
 export const initialState = {
-    board : {
-        x_coord: null,
-        y_coord: null 
-    },
+    clickedSquares: [],
     player : {
         currentPlayer: 0
-    }
+    },
 }
 
 
