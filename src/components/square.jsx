@@ -12,7 +12,7 @@ export function Square(props){
     // }
     const dispatch = useDispatch();
     const listVisitedSquares = useSelector(state => state.BoardReducer.clickedSquares);
-    let colorClass = 'box';
+    let colorClass = 'unclicked';
     
     if(listVisitedSquares.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
            colorClass  = 'clickedBox';
