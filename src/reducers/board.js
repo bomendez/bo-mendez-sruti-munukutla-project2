@@ -1,5 +1,5 @@
 import { initialState } from "./gameState";
-import {BOARD_CLICK} from '../actions/constants';
+import {BOARD_CLICK, ADD_SHIPS} from '../actions/constants';
 
 export const BoardReducer = (state = initialState, action) => {
     if(action.type === BOARD_CLICK 
@@ -9,6 +9,12 @@ export const BoardReducer = (state = initialState, action) => {
                 ...state,
                 clickedSquares: state.clickedSquares.concat({x_coord: action.payload.x_coord, y_coord: action.payload.y_coord})
             }
+    }
+    if(action.type === ADD_SHIPS) {
+        return {
+            ...state,
+            ships: state.ships.concat([{x_coord: action.payload.x_coord, y_coord: action.payload.y_coord}])
+        }
     }
     return state
 }

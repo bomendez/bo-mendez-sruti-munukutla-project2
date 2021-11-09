@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../square.css';
 import {boardClick} from '../actions/board';
 import { useDispatch, useSelector } from 'react-redux';
+
 export function Square(props){
     
     // state = {
@@ -12,7 +13,12 @@ export function Square(props){
     // }
     const dispatch = useDispatch();
     const listVisitedSquares = useSelector(state => state.BoardReducer.clickedSquares);
+    const shipsOnBoard = useSelector(state => state.BoardReducer.ships);
     let colorClass = 'unclicked';
+
+    if(shipsOnBoard.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
+        colorClass  = 'ship';
+    }
     
     if(listVisitedSquares.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
            colorClass  = 'clickedBox';

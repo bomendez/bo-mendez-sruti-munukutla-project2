@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import {Square} from './square';
+import {addShip} from '../actions/addShip';
+import { useState, useDispatch, useSelector } from 'react-redux';
 import {AIRCRAFT_CARRIER, BATTLESHIP, SUBMARINE, DESTROYER, PATROL_BOAT, SIZE_TEN} from './constants';
 
+function Board(props) {
+    const dispatch = useDispatch();
+    const shipsOnBoard = useSelector(state => state.BoardReducer.ships);
+    console.log(shipsOnBoard)
+    // const [gridRows, setGridRows] = initializeBoardState();
+    let gridRows = initializeBoardState();
+    putShipsOnBoard();
 
-class Board extends React.Component {
-    render() { 
-         let gridRows = this.initializeBoardState();
-         this.putShipsOnBoard(gridRows);
-         
-        return (
-            <table className="board-class"><tbody>{gridRows}</tbody></table>
-            );
-    }
-
-    initializeBoardState(){
+    function initializeBoardState(){
         let gridRows = [];
         let id = 0;
          for (let y = 0; y < 10; y++) {
@@ -28,69 +27,69 @@ class Board extends React.Component {
         return gridRows;
     }
 
-    putShipsOnBoard(gridRows){
+    function putShipsOnBoard(){
         for (let i = 2; i < AIRCRAFT_CARRIER + 1; i++) {
-            this.placeOneShip(gridRows, i)
+            placeOneShip(i)
             if (i === 3) { // two ships have size 3
-                this.placeOneShip(gridRows, i)
+                placeOneShip(i)
             }
         }
-        console.log(this.props)
+        console.log(props)
     }
 
-    /*
-    * Helper function to place one ship on board
-    */
-    placeOneShip(gridRows, shipSize) {
-        let randomRow, randomCol = this.getRowAndCol(shipSize)
+    // Helper function to place one ship on board 
+    function placeOneShip(shipSize) {
+        
+        let [randomRow, randomCol] = getRowAndCol(shipSize)
         // check whether ship placement is valid before placing ship
-        while (!this.shipPlacementValid(gridRows, randomRow, randomCol, shipSize)) {
-            randomRow = this.getRowAndCol(shipSize)[0]
-            randomCol = this.getRowAndCol(shipSize)[1]
-            // not sure why line below returns error
-            // randomRow, randomCol = this.getRowAndCol(shipSize)
+        while (!shipPlacementValid(randomRow, randomCol, shipSize)) {
+            let newRowCol = getRowAndCol(shipSize)
+            randomRow = newRowCol[0]
+            randomCol = newRowCol[1]
         }
-        gridRows[randomRow][randomCol] = 'ship'
-        this.fillRemainingShipSize(gridRows, randomRow, randomCol, shipSize)
+        console.log("add ship", randomRow, randomCol)
+        grid[randomRow][randomCol] = 'ship'
+        console.log("updated ships:", shipsOnBoard)
+        
+        fillRemainingShipSize(randomRow, randomCol, shipSize)
     }
 
-    /*
-    * Helper function checking whether a ship can be placed
-    * on given location with specified ship length
-    */
-    shipPlacementValid(gridRows, row, col, length) {
+    // Helper function checking whether a ship can be placed
+    // on given location with specified ship length
+    function shipPlacementValid(row, col, length) {
         for (let i = col; i < length - 1; i++) {
-            if (gridRows[row][col] === 'ship') { return false}
+            if (shipsOnBoard.some(e => e.x_coord === row && e.y_coord === col)) { return false}
         }
         return true
     }
 
-    /*
-    * Helper function that takes leftmost cell of ship and
-    * sets state of squares to the right for length of ship
-    */
-    fillRemainingShipSize(gridRows, row, col, length) {
+    // Helper function that takes leftmost cell of ship and
+    // sets state of squares to the right for length of ship
+    function fillRemainingShipSize(row, col, length) {
         for (let i = col + 1; i < length; i++) {
-            gridRows[row][i] = 'ship'
+            dispatch(addShip(row, i));
+            console.log("fillRemainingShipSize with", row, i)
+            console.log("fillRemainingShips:", shipsOnBoard)
         }
     }
 
-    /*
-    * Helper function to get random row and column values
-    */
-    getRowAndCol(shipSize) {
-        let randomRow = this.getRandomInteger(shipSize)
-        let randomCol = this.getRandomInteger(SIZE_TEN)
-        return randomRow, randomCol
+    // Helper function to get random row and column values
+    function getRowAndCol(shipSize) {
+        let randomRow = getRandomInteger(9 - shipSize)
+        let randomCol = getRandomInteger(SIZE_TEN)
+        return [randomRow, randomCol]
     }
 
-    /*
-    * Helper function that returns a random integer between
-    * 0 and a given maxInt
-    */
-    getRandomInteger(maxInt) {
+    // Helper function that returns a random integer between
+    // 0 and a given maxInt
+    function getRandomInteger(maxInt) {
         return Math.floor(Math.random() * maxInt);
-      }
+    }
+
+    return(
+            <table className="board-class"><tbody>{gridRows}</tbody></table>
+    )
+
 }
- 
+
 export default Board;
