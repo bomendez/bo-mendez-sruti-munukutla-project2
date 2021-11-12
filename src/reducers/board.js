@@ -1,4 +1,4 @@
-import { BOARD_CLICK, ADD_SHIPS } from "../actions/constants";
+import { BOARD_CLICK, RESTART } from "../actions/constants";
 import { AIRCRAFT_CARRIER, SIZE_TEN } from "../components/constants";
 
 function initialStateFunc() {
@@ -113,7 +113,8 @@ export const BoardReducer = (state, action) => {
         e.x_coord === action.payload.x_coord &&
         e.y_coord === action.payload.y_coord
     )
-  ) {
+  ) 
+  {
     return {
       ...state,
       clickedSquares: [
@@ -124,6 +125,11 @@ export const BoardReducer = (state, action) => {
         },
       ],
     };
+  }
+  if (
+    action.type === RESTART
+  ) {
+    return initialStateFunc();
   }
   return state;
 };
