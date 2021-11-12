@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../square.css';
 import {boardClick} from '../actions/board';
+import {switchTurns} from '../actions/switchTurns';
 import { useDispatch, useSelector } from 'react-redux';
 
 export function Square(props){
@@ -26,7 +27,7 @@ export function Square(props){
 
     function handleClick() {
         dispatch(boardClick(props.x_coord, props.y_coord));
-
+        dispatch(switchTurns());
     }
 
     return(

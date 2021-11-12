@@ -1,13 +1,16 @@
-import { BOARD_CLICK, RESTART } from "../actions/constants";
+import { BOARD_CLICK, RESTART, SWITCH_TURNS } from "../actions/constants";
 import { AIRCRAFT_CARRIER, SIZE_TEN } from "../components/constants";
 
 function initialStateFunc() {
   const initialState = {
     clickedSquares: [],
     ships: [],
-    player: {
-      currentPlayer: 0,
+    scores: {
+      userScore: 0,
+      aiScore: 0,
     },
+    userTurn: true,
+    winner: "",
   };
 
   let gridRows = initializeBoardState();
@@ -24,7 +27,7 @@ function initialStateFunc() {
       }
       gridRows.push(rowSquares);
     }
-    console.log(gridRows);
+    console.log("gridRows", gridRows);
     return gridRows;
   }
 
@@ -50,7 +53,6 @@ function initialStateFunc() {
     console.log("add ship", randomRow, randomCol);
     gridRows[randomRow][randomCol] = "ship";
     initialState.ships.push({ x_coord: randomCol, y_coord: randomRow });
-    // console.log("updated ships:", shipsOnBoard);
 
     fillRemainingShipSize(randomRow, randomCol, shipSize);
   }
@@ -76,8 +78,6 @@ function initialStateFunc() {
       gridRows[row][currCol] = "ship";
       initialState.ships.push({ x_coord: currCol, y_coord: row });
       currCol++;
-      //   console.log("fillRemainingShipSize with", row, i);
-      //   console.log("fillRemainingShips:", shipsOnBoard);
     }
   }
 
@@ -95,7 +95,7 @@ function initialStateFunc() {
   }
 
   initialState.board = gridRows;
-  console.log(initialState);
+  console.log("initial state", initialState);
   return initialState;
 }
 
@@ -130,6 +130,15 @@ export const BoardReducer = (state, action) => {
     action.type === RESTART
   ) {
     return initialStateFunc();
+  }
+  if (
+    action.type === SWITCH_TURNS
+  ) {
+    console.log(state.userTurn)
+    return {
+      ...state,
+      userTurn: !state.userTurn,
+    }
   }
   return state;
 };

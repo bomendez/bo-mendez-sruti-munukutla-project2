@@ -15,7 +15,7 @@ function Board(props) {
       }
       gridRows.push(<tr>{rowSquares}</tr>);
     }
-    console.log(gridRows);
+    console.log("board gridRows", gridRows);
     return gridRows;
   }
 
