@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Board from './board.jsx';
+import Restart from './restart.jsx';
 import ship5x1 from '../images/5x1_ship.png';
 import ship4x1 from '../images/4x1_ship.png';
 import ship3x1 from '../images/3x1_ship.png';
@@ -23,8 +25,7 @@ function Game() {
         <div className="container board-wrapper">
             <h1>Battleship</h1>            
             <div className="ScoreBoard">ScoreBoard</div>
-            
-
+            <Restart/>
             <div className="row">
                 {/* <div className="col ships-display">
                     <div className="ship"><img src={ship5x1} alt="5x1_ship"/></div>
