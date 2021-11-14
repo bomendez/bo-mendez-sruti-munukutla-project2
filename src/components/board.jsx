@@ -3,7 +3,7 @@ import { Square } from "./square";
 
 function Board(props) {
   const board = initializeBoardState();
-
+    
   function initializeBoardState() {
     let gridRows = [];
     let id = 0;

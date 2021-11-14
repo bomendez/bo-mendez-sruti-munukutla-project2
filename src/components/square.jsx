@@ -14,10 +14,13 @@ export function Square(props){
     const dispatch = useDispatch();
     const listVisitedSquares = useSelector(state => state.BoardReducer.clickedSquares);
     const shipsOnBoard = useSelector(state => state.BoardReducer.ships);
+    const playerTurn = useSelector(state => state.player_turn);
     let colorClass = 'unclicked';
 
-    if(shipsOnBoard.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
-        colorClass  = 'ship';
+    for(let ship in shipsOnBoard){
+        if(shipsOnBoard[ship].some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
+            colorClass  = 'ship';
+        }
     }
     
     if(listVisitedSquares.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
