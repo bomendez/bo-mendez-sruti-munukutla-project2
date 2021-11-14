@@ -5,21 +5,20 @@ import ship5x1 from '../images/5x1_ship.png';
 import ship4x1 from '../images/4x1_ship.png';
 import ship3x1 from '../images/3x1_ship.png';
 import ship2x1 from '../images/2x1_ship.png';
-import Board from './board';
 import { useSelector } from 'react-redux';
 
 
  
 function Game() {
-        const playerTurn = useSelector(state => state.player_turn);
-        let leftOverlay = '';
-        let rightOverlay = '';
-        if(playerTurn === 0){
-            rightOverlay = 'classOverlay';
-            leftOverlay = 'highlight';
+        const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
+        let leftClassStat = '';
+        let rightClassStat = '';
+        if(!playerTurn){
+            rightClassStat = 'classOverlay';
+            leftClassStat = 'highlight';
         }else{
-            leftOverlay = 'classOverlay';
-            rightOverlay = 'highlight';
+            leftClassStat = 'classOverlay';
+            rightClassStat = 'highlight';
         }
         return (
         <div className="container board-wrapper">
@@ -34,10 +33,10 @@ function Game() {
                     <div className="ship" ><img src={ship2x1} alt="2x1_ship"/></div>
                     <div className="ship" ><img src={ship2x1} alt="2x1_ship"/></div>
                 </div> */}
-                <div className={'col-6 ' + rightOverlay}>
+                <div className={'col-6 ' + leftClassStat}>
                     <Board player_id ="0"/>
                 </div>
-                <div className={'col-6 ' + leftOverlay}>
+                <div className={'col-6 ' + rightClassStat}>
                     <Board player_id="1"/>
                 </div>
                 {/* <div className="col">
