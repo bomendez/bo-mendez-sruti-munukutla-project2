@@ -4,10 +4,10 @@ import { AIRCRAFT_CARRIER, SIZE_TEN } from "../components/constants";
 function initialStateFunc() {
   const initialState = {
     clickedSquares: [],
-    ships: [],
-    player: {
-      currentPlayer: 0,
-    },
+    ships: {},
+    // player: {
+    //   currentPlayer: 0,
+    // },
   };
 
   let gridRows = initializeBoardState();
@@ -29,17 +29,20 @@ function initialStateFunc() {
   }
 
   function putShipsOnBoard() {
-    for (let i = 2; i < AIRCRAFT_CARRIER + 1; i++) {
-      placeOneShip(i);
-      if (i === 3) {
-        // two ships have size 3
-        placeOneShip(i);
-      }
+    for(let ship in ships){
+      placeOneShip(ship, ships[ship])
     }
+    // for (let i = 2; i < AIRCRAFT_CARRIER + 1; i++) {
+    //   placeOneShip(i);
+    //   if (i === 3) {
+    //     // two ships have size 3
+    //     placeOneShip(i);
+    //   }
+    // }
   }
 
   // Helper function to place one ship on board
-  function placeOneShip(shipSize) {
+  function placeOneShip(shipType, shipSize) {
     let [randomRow, randomCol] = getRowAndCol(shipSize);
     // check whether ship placement is valid before placing ship
     while (!shipPlacementValid(randomRow, randomCol, shipSize)) {
@@ -49,32 +52,37 @@ function initialStateFunc() {
     }
     console.log("add ship", randomRow, randomCol);
     gridRows[randomRow][randomCol] = "ship";
-    initialState.ships.push({ x_coord: randomCol, y_coord: randomRow });
+    // initialState.ships.push({ x_coord: randomCol, y_coord: randomRow });
+      initialState.ships[shipType] = []
+      initialState.ships[shipType].push({ x_coord: randomCol, y_coord: randomRow });
     // console.log("updated ships:", shipsOnBoard);
 
-    fillRemainingShipSize(randomRow, randomCol, shipSize);
+    fillRemainingShipSize(randomRow, randomCol, shipSize, shipType);
   }
 
   // Helper function checking whether a ship can be placed
   // on given location with specified ship length
   function shipPlacementValid(row, col, length) {
-    for (let i = col; i < length - 1; i++) {
-      if (
-        initialState.ships.some((e) => e.x_coord === row && e.y_coord === col)
-      ) {
-        return false;
+    for(let ship in ships){
+      if(ship in initialState.ships){
+      for(let currCol = col; currCol <= length; currCol++){
+        if(initialState.ships[ship].indexOf({row, currCol}) >=0){
+          return false;
+        }
       }
     }
-    return true;
   }
+  return true;
+
+}
 
   // Helper function that takes leftmost cell of ship and
   // sets state of squares to the right for length of ship
-  function fillRemainingShipSize(row, col, length) {
+  function fillRemainingShipSize(row, col, length, shipType) {
     let currCol = col + 1;
     for (let i = 0; i < length - 1; i++) {
       gridRows[row][currCol] = "ship";
-      initialState.ships.push({ x_coord: currCol, y_coord: row });
+      initialState.ships[shipType].push({ x_coord: currCol, y_coord: row });
       currCol++;
       //   console.log("fillRemainingShipSize with", row, i);
       //   console.log("fillRemainingShips:", shipsOnBoard);
@@ -97,6 +105,15 @@ function initialStateFunc() {
   initialState.board = gridRows;
   console.log(initialState);
   return initialState;
+}
+
+//define a dictionary of ships with respective lengths. 
+const ships = {
+  carrier: 5,
+  battleship: 4,
+  destroyer: 3,
+  submarine: 3,
+  patrolBoat: 2
 }
 
 // REDUCER STARTS HERE

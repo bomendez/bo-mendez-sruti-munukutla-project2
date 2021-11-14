@@ -4,3 +4,4 @@ export const SUBMARINE = 3;
 export const DESTROYER = 3;
 export const PATROL_BOAT = 2;
 export const SIZE_TEN = 10;
+export const SWITCH_PLAYER = true;
