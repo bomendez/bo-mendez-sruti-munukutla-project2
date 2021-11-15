@@ -18,6 +18,7 @@ export function Square(props){
     let shipsOnBoard;
     let listVisitedSquares;
     console.log(props);
+    //depending on the Board of player, display Board details
     if(props.player_id === '0'){
          shipsOnBoard = board_state.player_zero.ships;
          listVisitedSquares = board_state.player_zero.clickedSquares;
@@ -48,7 +49,6 @@ export function Square(props){
 
     return(
             //change to include  onhover event next
-
      <td className={colorClass} id={props.id} onClick={handleClick}></td>
     )
     
