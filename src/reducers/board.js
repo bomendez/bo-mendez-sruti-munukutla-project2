@@ -6,14 +6,18 @@ function initialStateFunc() {
     player_zero : {
       clickedSquares: [], // rename to boardSquares
       ships: {},
-      isActive: true
+      isActive: true,
+      score: 17,
+      declareWinner: false
       //same between both boards:
       // ships -> my ships: Since ships has state Hit/Unselected, we would know which ones have been hit or Unselected
     },
     player_one : {
       clickedSquares: [], // rename to boardSquares
       ships: {},
-      isActive: false
+      isActive: false,
+      score: 17,
+      declareWinner: false
       //same between both boards:
       // ships -> my ships: Since ships has state Hit/Unselected, we would know which ones have been hit or Unselected
     }
@@ -138,6 +142,7 @@ const ships = {
   patrolBoat: 2
 }
 
+  
 // REDUCER STARTS HERE
 export const BoardReducer = (state, action) => {
   if (state === undefined) {
@@ -149,12 +154,12 @@ export const BoardReducer = (state, action) => {
   if (action.type === BOARD_CLICK){
     //get the current player
     if(action.payload.player_id === '0'){
-      player_no = state.player_zero;
-      //get the opponent player since their state/squares need to be changed
-      opponent_player = state.player_one;
-    }else{
       player_no = state.player_one;
+      //get the opponent player since their state/squares need to be changed
       opponent_player = state.player_zero;
+    }else{
+      player_no = state.player_zero;
+      opponent_player = state.player_one;
     }
     //avoid already clicked squares being added to the list of visited squares
     //change this later
@@ -164,6 +169,8 @@ export const BoardReducer = (state, action) => {
         e.y_coord === action.payload.y_coord
     )){
     if(action.payload.player_id === '0'){
+      //if player is player_zero, need to update the clicked squares of player one
+      // and the score of player_zero if a shit has been hit
       return {
           ...state,
           player_zero:{
@@ -173,7 +180,8 @@ export const BoardReducer = (state, action) => {
                 x_coord: action.payload.x_coord,
                 y_coord: action.payload.y_coord,
               }
-            )
+            ),
+            score: action.payload.hitShip ? state.player_zero.score - 1 :  state.player_zero.score
           }
         }
     }else{
@@ -186,7 +194,8 @@ export const BoardReducer = (state, action) => {
               x_coord: action.payload.x_coord,
               y_coord: action.payload.y_coord,
             }
-          )
+          ),
+          score: action.payload.hitShip ? state.player_one.score - 1 :  state.player_one.score
         }
       }
     }
