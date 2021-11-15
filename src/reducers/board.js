@@ -5,9 +5,6 @@ function initialStateFunc() {
   const initialState = {
     clickedSquares: [],
     ships: {},
-    // player: {
-    //   currentPlayer: 0,
-    // },
   };
 
   let gridRows = initializeBoardState();
@@ -24,7 +21,6 @@ function initialStateFunc() {
       }
       gridRows.push(rowSquares);
     }
-    console.log(gridRows);
     return gridRows;
   }
 
@@ -32,67 +28,78 @@ function initialStateFunc() {
     for(let ship in ships){
       placeOneShip(ship, ships[ship])
     }
-    // for (let i = 2; i < AIRCRAFT_CARRIER + 1; i++) {
-    //   placeOneShip(i);
-    //   if (i === 3) {
-    //     // two ships have size 3
-    //     placeOneShip(i);
-    //   }
-    // }
   }
 
   // Helper function to place one ship on board
   function placeOneShip(shipType, shipSize) {
-    let [randomRow, randomCol] = getRowAndCol(shipSize);
+    let isVertical = getRandomInteger(2);
+    
+    let [randomRow, randomCol] = getRowAndCol(shipSize, isVertical);
     // check whether ship placement is valid before placing ship
-    while (!shipPlacementValid(randomRow, randomCol, shipSize)) {
+    while (!shipPlacementValid(randomRow, randomCol, shipSize, isVertical)) {
       let newRowCol = getRowAndCol(shipSize);
       randomRow = newRowCol[0];
       randomCol = newRowCol[1];
     }
-    console.log("add ship", randomRow, randomCol);
     gridRows[randomRow][randomCol] = "ship";
-    // initialState.ships.push({ x_coord: randomCol, y_coord: randomRow });
       initialState.ships[shipType] = []
       initialState.ships[shipType].push({ x_coord: randomCol, y_coord: randomRow });
-    // console.log("updated ships:", shipsOnBoard);
 
-    fillRemainingShipSize(randomRow, randomCol, shipSize, shipType);
+    fillRemainingShipSize(randomRow, randomCol, shipSize, shipType, isVertical);
   }
 
   // Helper function checking whether a ship can be placed
   // on given location with specified ship length
-  function shipPlacementValid(row, col, length) {
-    for(let ship in ships){
-      if(ship in initialState.ships){
-      for(let currCol = col; currCol <= length; currCol++){
-        if(initialState.ships[ship].indexOf({row, currCol}) >=0){
-          return false;
+  function shipPlacementValid(row, col, length, isVertical) {
+    for(let ship in ships) {
+      if(ship in initialState.ships) {
+        if (isVertical) {
+          for(let currRow = row; currRow <= length; currRow++) {
+            if(initialState.ships[ship].indexOf({currRow, col}) >=0) {
+              return false;
+            }
+          }
+        } else {
+          for(let currCol = col; currCol <= length; currCol++) {
+            if(initialState.ships[ship].indexOf({row, currCol}) >=0) {
+              return false;
+            }
+          }
         }
       }
     }
-  }
   return true;
+  }
 
-}
-
-  // Helper function that takes leftmost cell of ship and
-  // sets state of squares to the right for length of ship
-  function fillRemainingShipSize(row, col, length, shipType) {
+  // Helper function that takes head of ship and
+  // sets state of remaining squares for length of ship
+  function fillRemainingShipSize(row, col, length, shipType, fillVertical) {
+    let currRow = row + 1;
     let currCol = col + 1;
     for (let i = 0; i < length - 1; i++) {
-      gridRows[row][currCol] = "ship";
-      initialState.ships[shipType].push({ x_coord: currCol, y_coord: row });
-      currCol++;
-      //   console.log("fillRemainingShipSize with", row, i);
-      //   console.log("fillRemainingShips:", shipsOnBoard);
+      if (fillVertical) {
+        gridRows[currRow][col] = "ship";
+        initialState.ships[shipType].push({ x_coord: col, y_coord: currRow });
+        currRow++;
+      } else {
+        gridRows[row][currCol] = "ship";
+        initialState.ships[shipType].push({ x_coord: currCol, y_coord: row });
+        currCol++;
+      }
     }
   }
 
   // Helper function to get random row and column values
-  function getRowAndCol(shipSize) {
-    let randomRow = getRandomInteger(SIZE_TEN);
-    let randomCol = getRandomInteger(9 - shipSize);
+  function getRowAndCol(shipSize, isVertical) {
+    let rowMax = SIZE_TEN;
+    let colMax = SIZE_TEN;
+    if (isVertical) {
+      rowMax = 9 - shipSize;
+    } else {
+      colMax = 9 - shipSize;
+    }
+    let randomRow = getRandomInteger(rowMax);
+    let randomCol = getRandomInteger(colMax);
     return [randomRow, randomCol];
   }
 
