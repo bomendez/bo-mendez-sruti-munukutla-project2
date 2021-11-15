@@ -24,7 +24,7 @@ function Game() {
             <h1>Battleship</h1>            
             <div className="ScoreBoard">ScoreBoard: 
             Player: {playerTurn} <span> </span>
-            Score: {playerTurn === 0 ? 17 - boardStats.player_zero.score: 17- boardStats.player_zero.score}</div>
+            Score: {playerTurn === 0 ? (17 - boardStats.player_one.score): (17- boardStats.player_zero.score)}</div>
             <Restart/>
             <div className="row">
                 <div className={'col-6 ' + leftClassStat}>

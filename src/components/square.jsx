@@ -45,9 +45,9 @@ export function Square(props) {
         }
     }
 
-    //check if the clicked co-ordinate is a ship on opponents board
+    //check if the clicked co-ordinate is a ship on currently active board
     function checkCoordinateIsShip(ship) {
-        if (opponentShipsOnBoard[ship].some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
+        if (shipsOnBoard[ship].some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
             return true;
         }
         return false;
