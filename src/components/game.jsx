@@ -14,16 +14,16 @@ function Game() {
         let leftClassStat = '';
         let rightClassStat = '';
         if(!playerTurn){
-            rightClassStat = 'classOverlay';
-            leftClassStat = 'highlight';
-        }else{
             leftClassStat = 'classOverlay';
             rightClassStat = 'highlight';
+        }else{
+            rightClassStat = 'classOverlay';
+            leftClassStat = 'highlight';
         }
         return (
         <div className="container board-wrapper">
             <h1>Battleship</h1>            
-            <div className="ScoreBoard">ScoreBoard</div>
+            <div className="ScoreBoard">ScoreBoard: Player: {playerTurn}</div>
             <Restart/>
             <div className="row">
                 {/* <div className="col ships-display">

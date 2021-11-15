@@ -130,31 +130,56 @@ export const BoardReducer = (state, action) => {
   if (state === undefined) {
     return initialStateFunc();
   }
-
-  if (
-    action.type === BOARD_CLICK &&
+  let player_no;
+  let opponent_player;
+  //if board is clicked,
+  if (action.type === BOARD_CLICK){
+    //get the current player
+    if(action.payload.player_id === '0'){
+      player_no = state.player_zero;
+      //get the opponent player since their state/squares need to be changed
+      opponent_player = state.player_one;
+    }else{
+      player_no = state.player_one;
+      opponent_player = state.player_zero;
+    }
     //avoid already clicked squares being added to the list of visited squares
-    !state.clickedSquares.some(
+    //change this later
+    if(!opponent_player.clickedSquares.some(
       (e) =>
         e.x_coord === action.payload.x_coord &&
         e.y_coord === action.payload.y_coord
-    )
-  ) 
-  {
-    return {
-      ...state,
-      clickedSquares: [
-        ...state.clickedSquares,
-        {
-          x_coord: action.payload.x_coord,
-          y_coord: action.payload.y_coord,
-        },
-      ],
-    };
+    )){
+    if(action.payload.player_id === '0'){
+      return {
+          ...state,
+          player_zero:{
+            ...state.player_zero,
+            clickedSquares : state.player_zero.clickedSquares.concat(
+              {
+                x_coord: action.payload.x_coord,
+                y_coord: action.payload.y_coord,
+              }
+            )
+          }
+        }
+    }else{
+        return {
+        ...state,
+        player_one:{
+          ...state.player_one,
+          clickedSquares : state.player_one.clickedSquares.concat(
+            {
+              x_coord: action.payload.x_coord,
+              y_coord: action.payload.y_coord,
+            }
+          )
+        }
+      }
+    }
   }
-  if (
-    action.type === RESTART
-  ) {
+}
+  if (action.type === RESTART) {
     return initialStateFunc();
   }
   return state;

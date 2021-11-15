@@ -19,11 +19,9 @@ export function Square(props){
     let listVisitedSquares;
     console.log(props);
     if(props.player_id === '0'){
-        // const player = board_state.player_zero;
          shipsOnBoard = board_state.player_zero.ships;
          listVisitedSquares = board_state.player_zero.clickedSquares;
     }else{
-        // const player = board_state.player_one;
          shipsOnBoard = board_state.player_one.ships;
          listVisitedSquares = board_state.player_one.clickedSquares;
 
