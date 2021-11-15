@@ -36,6 +36,8 @@ export function Square(props) {
     }
     let colorClass = 'unclicked';
 
+let icon = "";
+
     function checkCoordinateIsShip(ship) {
         if (shipsOnBoard[ship].some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
             return true;
@@ -46,11 +48,14 @@ export function Square(props) {
     for (let ship in shipsOnBoard) {
         if (checkCoordinateIsShip(ship)) {
             colorClass = 'ship';
+            icon = "fas fa-ship";
         }
     }
 
     if (listVisitedSquares.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
         colorClass = 'clickedBox';
+        icon = "far fa-check-square";
+
     }
 
     function handleClick() {
@@ -74,7 +79,9 @@ export function Square(props) {
     }
     return (
         //change to include  onhover event next
-        <td className={colorClass} id={props.id} onClick={handleClick}></td>
+<td className={colorClass} id={props.id} onClick={handleClick}>
+         <i class={icon}></i>
+     </td>
     )
 
     // makeSquareVisited(){
