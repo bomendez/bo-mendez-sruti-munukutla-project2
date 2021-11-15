@@ -7,14 +7,27 @@ import { useDispatch, useSelector } from 'react-redux';
 export function Square(props){
     
     // state = {
-    //     HasShip: false,
+    //     Unselected: false,
     //     HitShip: false,
-    //     visited: false,
-    //     hovered: false
+    //     Miss: false,
+    //     Hover: false
     // }
     const dispatch = useDispatch();
-    const listVisitedSquares = useSelector(state => state.BoardReducer.clickedSquares);
-    const shipsOnBoard = useSelector(state => state.BoardReducer.ships);
+
+    const board_state = useSelector(state => state.BoardReducer);
+    let shipsOnBoard;
+    let listVisitedSquares;
+    console.log(props);
+    if(props.player_id === '0'){
+        // const player = board_state.player_zero;
+         shipsOnBoard = board_state.player_zero.ships;
+         listVisitedSquares = board_state.player_zero.clickedSquares;
+    }else{
+        // const player = board_state.player_one;
+         shipsOnBoard = board_state.player_one.ships;
+         listVisitedSquares = board_state.player_one.clickedSquares;
+
+    }
     const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
     let colorClass = 'unclicked';
     for(let ship in shipsOnBoard){
@@ -29,7 +42,7 @@ export function Square(props){
 
     function handleClick() {
         console.log("handleClick()");
-        dispatch(boardClick(props.x_coord, props.y_coord));
+        dispatch(boardClick(props.x_coord, props.y_coord, props.player_id));
         let nextTurn = playerTurn === 0? 1 : 0;
         console.log("from square.jsx, player is: ", nextTurn)
         dispatch(switchTurns(nextTurn));

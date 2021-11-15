@@ -3,12 +3,21 @@ import { AIRCRAFT_CARRIER, SIZE_TEN } from "../components/constants";
 
 function initialStateFunc() {
   const initialState = {
-    clickedSquares: [],
-    ships: {},
-    // player: {
-    //   currentPlayer: 0,
-    // },
-  };
+    player_zero : {
+      clickedSquares: [], // rename to boardSquares
+      ships: {},
+      isActive: true
+      //same between both boards:
+      // ships -> my ships: Since ships has state Hit/Unselected, we would know which ones have been hit or Unselected
+    },
+    player_one : {
+      clickedSquares: [], // rename to boardSquares
+      ships: {},
+      isActive: false
+      //same between both boards:
+      // ships -> my ships: Since ships has state Hit/Unselected, we would know which ones have been hit or Unselected
+    }
+  }
 
   let gridRows = initializeBoardState();
   putShipsOnBoard();
@@ -30,7 +39,8 @@ function initialStateFunc() {
 
   function putShipsOnBoard() {
     for(let ship in ships){
-      placeOneShip(ship, ships[ship])
+      placeOneShip(ship, ships[ship], initialState.player_zero)
+      placeOneShip(ship, ships[ship], initialState.player_one)
     }
     // for (let i = 2; i < AIRCRAFT_CARRIER + 1; i++) {
     //   placeOneShip(i);
@@ -42,10 +52,10 @@ function initialStateFunc() {
   }
 
   // Helper function to place one ship on board
-  function placeOneShip(shipType, shipSize) {
+  function placeOneShip(shipType, shipSize, player_no) {
     let [randomRow, randomCol] = getRowAndCol(shipSize);
     // check whether ship placement is valid before placing ship
-    while (!shipPlacementValid(randomRow, randomCol, shipSize)) {
+    while (!shipPlacementValid(randomRow, randomCol, shipSize, player_no)) {
       let newRowCol = getRowAndCol(shipSize);
       randomRow = newRowCol[0];
       randomCol = newRowCol[1];
@@ -53,36 +63,35 @@ function initialStateFunc() {
     console.log("add ship", randomRow, randomCol);
     gridRows[randomRow][randomCol] = "ship";
     // initialState.ships.push({ x_coord: randomCol, y_coord: randomRow });
-      initialState.ships[shipType] = []
-      initialState.ships[shipType].push({ x_coord: randomCol, y_coord: randomRow });
+    player_no.ships[shipType] = []
+    player_no.ships[shipType].push({ x_coord: randomCol, y_coord: randomRow });
     // console.log("updated ships:", shipsOnBoard);
 
-    fillRemainingShipSize(randomRow, randomCol, shipSize, shipType);
+    fillRemainingShipSize(randomRow, randomCol, shipSize, shipType, player_no);
   }
 
   // Helper function checking whether a ship can be placed
   // on given location with specified ship length
-  function shipPlacementValid(row, col, length) {
+  function shipPlacementValid(row, col, length, player_no) {
     for(let ship in ships){
-      if(ship in initialState.ships){
-      for(let currCol = col; currCol <= length; currCol++){
-        if(initialState.ships[ship].indexOf({row, currCol}) >=0){
-          return false;
+      if(ship in player_no.ships){
+        for(let currCol = col; currCol <= length; currCol++){
+          if(player_no.ships[ship].indexOf({row, currCol}) >=0){
+            return false;
+          }
         }
       }
     }
+    return true;
   }
-  return true;
-
-}
 
   // Helper function that takes leftmost cell of ship and
   // sets state of squares to the right for length of ship
-  function fillRemainingShipSize(row, col, length, shipType) {
+  function fillRemainingShipSize(row, col, length, shipType, player_no) {
     let currCol = col + 1;
     for (let i = 0; i < length - 1; i++) {
       gridRows[row][currCol] = "ship";
-      initialState.ships[shipType].push({ x_coord: currCol, y_coord: row });
+      player_no.ships[shipType].push({ x_coord: currCol, y_coord: row });
       currCol++;
       //   console.log("fillRemainingShipSize with", row, i);
       //   console.log("fillRemainingShips:", shipsOnBoard);
@@ -102,7 +111,7 @@ function initialStateFunc() {
     return Math.floor(Math.random() * maxInt);
   }
 
-  initialState.board = gridRows;
+  //initialState.board = gridRows;
   console.log(initialState);
   return initialState;
 }

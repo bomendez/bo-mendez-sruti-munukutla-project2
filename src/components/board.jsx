@@ -10,7 +10,7 @@ function Board(props) {
     for (let y = 0; y < 10; y++) {
       const rowSquares = [];
       for (let x = 0; x < 10; x++) {
-        rowSquares.push(<Square id={id} x_coord={x} y_coord={y} />);
+        rowSquares.push(<Square id={id} x_coord={x} y_coord={y} player_id={props.player_id}/>);
         id++;
       }
       gridRows.push(<tr>{rowSquares}</tr>);
