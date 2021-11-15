@@ -17,15 +17,22 @@ export function Square(props){
     const shipsOnBoard = useSelector(state => state.BoardReducer.ships);
     const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
     let colorClass = 'unclicked';
+    let icon = "";
+
     for(let ship in shipsOnBoard){
         if(shipsOnBoard[ship].some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
             colorClass  = 'ship';
+            icon = "fas fa-ship";
         }
     }
     
     if(listVisitedSquares.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)){
            colorClass  = 'clickedBox';
-    }
+           icon = "far fa-check-square";
+    } 
+    // else {
+    //     icon = "fas fa-bomb";
+    // }
 
     function handleClick() {
         console.log("handleClick()");
@@ -38,7 +45,9 @@ export function Square(props){
     return(
             //change to include  onhover event next
 
-     <td className={colorClass} id={props.id} onClick={handleClick}></td>
+     <td className={colorClass} id={props.id} onClick={handleClick}>
+         <i class={icon}></i>
+     </td>
     )
     
     // makeSquareVisited(){
