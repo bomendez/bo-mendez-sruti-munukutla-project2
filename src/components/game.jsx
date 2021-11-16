@@ -6,7 +6,10 @@ import { useSelector } from 'react-redux';
 
  
 function Game() {
+        const boardStats = useSelector(state => state.BoardReducer);
         const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
+        const playerZeroWins = boardStats.player_zero.declareWinner;
+        const playerOneWins = boardStats.player_one.declareWinner;
         let leftClassStat = '';
         let rightClassStat = '';
         if(!playerTurn){
@@ -19,7 +22,9 @@ function Game() {
         return (
         <div className="container board-wrapper">
             <h1>Battleship</h1>            
-            <div className="ScoreBoard">ScoreBoard: Player: {playerTurn}</div>
+            <div className="ScoreBoard">ScoreBoard: 
+            Player: {playerTurn} <span> </span>
+            Score: {playerTurn === 0 ? (17 - boardStats.player_one.score): (17- boardStats.player_zero.score)}</div>
             <Restart/>
             <div className="row">
                 <div className={'col-6 ' + leftClassStat}>
