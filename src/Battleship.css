@@ -157,7 +157,7 @@ a:visited {
 }
 
 .clickedBox{
-    background-color: coral;
+    background-color: #77dd77;
 }
 
 .WinnerBoard{
@@ -167,3 +167,4 @@ a:visited {
 .NoWinner{
     visibility: hidden;
 }
+

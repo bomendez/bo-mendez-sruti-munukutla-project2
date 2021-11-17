@@ -21,7 +21,6 @@ export function Square(props) {
     let opponentShipsOnBoard;
     let opponentListVisitedSquares;
 
-    // console.log(props);
     //depending on the Board of player, display Board details
     if (props.player_id === '0') {
         shipsOnBoard = board_state.player_zero.ships;
@@ -34,7 +33,7 @@ export function Square(props) {
         opponentShipsOnBoard = board_state.player_zero.ships;
         opponentListVisitedSquares = board_state.player_zero.clickedSquares;
     }
-    let colorClass = 'unclicked';
+    let colorClass;
 
     let icon = "";
 
@@ -54,13 +53,20 @@ export function Square(props) {
         return false;
     }
 
-
-   
-    if (listVisitedSquares.some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
+    //set diplay based on board state
+    if(unselected){
+        colorClass ='unclicked';
+    }else if(hit){
+        // colorClass = 'highlight';
+        icon = "fa fa-bomb";
+    }else if(miss){
         colorClass = 'clickedBox';
         icon = "far fa-check-square";
-
     }
+    //on hover event handler state change to be added
+    // }else if(hover){
+    // }
+   
 
     function aiTurn() {
         console.log("aiClick()");
@@ -138,8 +144,4 @@ export function Square(props) {
         </td>
     )
 
-    // makeSquareVisited(){
-    //     this.setState({visited: true});
-    //     document.getElementById(this.props.id).style.backgroundColor = "coral";
-    // }
 }
