@@ -20,7 +20,7 @@ export function Square(props) {
     let listVisitedSquares;
     let opponentShipsOnBoard;
     let opponentListVisitedSquares;
-    console.log(props);
+    // console.log(props);
     //depending on the Board of player, display Board details
     if (props.player_id === '0') {
         shipsOnBoard = board_state.player_zero.ships;
@@ -41,7 +41,7 @@ export function Square(props) {
     for (let ship in shipsOnBoard) {
         if (checkCoordinateIsShip(ship)) {
             colorClass = 'ship';
-            icon = "fas fa-ship";
+            icon = "fa fa-ship";
         }
     }
 
@@ -61,14 +61,59 @@ export function Square(props) {
 
     }
 
+    function aiTurn() {
+        console.log("aiClick()");
+        let x = getRandomInteger(10)
+        let y = getRandomInteger(10)
+        while (!isUnselected(x, y)) {
+            // get random number unselected
+            x = getRandomInteger(10)
+            y = getRandomInteger(10)
+        }
+        let hitShip = setHitOrMiss();
+        dispatch(boardClick(x, y, "1", hitShip));
+        let nextTurn = playerTurn === 0 ? 1 : 0;
+        setUnselected(false);
+        console.log("from square.jsx, player is: ai", nextTurn)
+        changePlayer(nextTurn);
+    }
+
+    function changePlayer(nextTurn) {
+        dispatch(switchTurns(nextTurn));
+    }
+
     function handleClick() {
         console.log("handleClick()");
         let hitShip = setHitOrMiss();
         dispatch(boardClick(props.x_coord, props.y_coord, props.player_id,hitShip));
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
-        console.log("from square.jsx, player is: ", nextTurn)
-        dispatch(switchTurns(nextTurn));
+        changePlayer(nextTurn);
+        // console.log("from square.jsx, player is: ", nextTurn)
+        // dispatch(switchTurns(nextTurn));
+
+        // if (playerTurn === 0) {
+            
+        // }
+        // aiTurn();
+    }
+
+    // Helper function that checks whether a square is unselected
+    function isUnselected(x_coord, y_coord) {
+        console.log("AI check x:", x_coord, "y:", y_coord)
+        if (board_state.player_one.clickedSquares.some(
+            e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
+                console.log("AI check already selected")
+                return false;
+        }
+        console.log("AI check unselected")
+        return true;
+    }
+
+    // Helper function that returns a random integer between
+    // 0 and a given maxInt
+    function getRandomInteger(maxInt) {
+        return Math.floor(Math.random() * maxInt);
     }
 
     function setHitOrMiss() {
@@ -81,6 +126,11 @@ export function Square(props) {
         setMiss(true);
         return false;
     }
+
+    function handleAI() {
+
+    }
+
     return (
         //change to include  onhover event next
         <td className={colorClass} id={props.id} onClick={handleClick}>
