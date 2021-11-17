@@ -35,7 +35,9 @@ function initialStateFunc() {
   function putShipsOnBoard() {
     for(let ship in ships){
       placeOneShip(ship, ships[ship], initialState.player_zero)
-      placeOneShip(ship, ships[ship], initialState.player_one)
+      if(!initialState.gameType.freePlay){
+        placeOneShip(ship, ships[ship], initialState.player_one)
+      }
     }
   }
 
@@ -234,7 +236,15 @@ export const BoardReducer = (state, action) => {
   }
 }
   if (action.type === RESTART) {
-    return initialStateFunc();
+   let newState =  initialStateFunc();
+   return {
+    ...newState,
+    gameType: {
+      ...newState.gameType,
+      freePlay: true
+    }
+  }
+
   }
 
   if(action.type === SET_GAME_TYPE){

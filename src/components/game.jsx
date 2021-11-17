@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 function Game() {
         const boardStats = useSelector(state => state.BoardReducer);
         const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
+        const isFreePlay = useSelector(state => state.BoardReducer.gameType.freePlay);
         //winner logic
         let playerZeroWins = false;
         let playerOneWins = false;
@@ -31,9 +32,33 @@ function Game() {
             rightClassStat = 'classOverlay';
             leftClassStat = 'highlight';
         }
+        if(isFreePlay){
+            return(
+                <div className="container board-wrapper">
+                <h1>Battleship</h1>            
+                
+                
+                <Restart/>
+                <div className="row">
+                <div className='col-3'>
+                <div className="ScoreBoard">ScoreBoard: 
+                Player: {playerTurn} <span> </span>
+                Score: {playerTurn === 0 ? (17 - boardStats.player_one.score): (17- boardStats.player_zero.score)}</div>
+                <div className={winnerBoardClass}>Player {playerZeroWins ? 0 : 1} wins the game</div>
+                    </div>
+                    <div className='col-6'>
+                        <Board player_id ="0"/>
+                    </div>
+                    {/* <div className={'col-6 ' + rightClassStat}>
+                        <Board player_id="1"/>
+                    </div> */}
+                </div>
+            </div>);
+        }else{
         return (
         <div className="container board-wrapper">
             <h1>Battleship</h1>            
+            
             <div className="ScoreBoard">ScoreBoard: 
             Player: {playerTurn} <span> </span>
             Score: {playerTurn === 0 ? (17 - boardStats.player_one.score): (17- boardStats.player_zero.score)}</div>
@@ -48,6 +73,7 @@ function Game() {
                 </div>
             </div>
         </div>);
+        }
 }
  
 export default Game;
