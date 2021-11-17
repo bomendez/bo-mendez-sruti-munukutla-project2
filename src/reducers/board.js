@@ -1,9 +1,13 @@
-import { BOARD_CLICK, RESTART } from "../actions/constants";
+import { BOARD_CLICK, RESTART, SET_GAME_TYPE } from "../actions/constants";
 import { AIRCRAFT_CARRIER, SIZE_TEN } from "../components/constants";
 
 function initialStateFunc() {
   console.log("calling initial state func")
   const initialState = {
+    //gameType: '',
+    gameType: {
+      freePlay: false,
+    },
     player_zero : {
       clickedSquares: [], // rename to boardSquares
       ships: {},
@@ -231,6 +235,16 @@ export const BoardReducer = (state, action) => {
 }
   if (action.type === RESTART) {
     return initialStateFunc();
+  }
+
+  if(action.type === SET_GAME_TYPE){
+    return {
+    ...state,
+    gameType : {
+      ...state.gameType,
+      freePlay: action.payload.gameType === "free"? true: false
+    }
+    }
   }
   return state;
 };

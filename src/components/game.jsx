@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 function Game() {
         const boardStats = useSelector(state => state.BoardReducer);
         const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
+        //winner logic
         let playerZeroWins = false;
         let playerOneWins = false;
         let player_one_score = boardStats.player_one.score;
@@ -20,7 +21,7 @@ function Game() {
             playerOneWins = true;
             winnerBoardClass = 'WinnerBoard';
         }
-
+        //board display switch based on turn
         let leftClassStat = '';
         let rightClassStat = '';
         if(!playerTurn){
