@@ -67,6 +67,10 @@ export function Square(props) {
     // }else if(hover){
     // }
    
+    function setMouseOver(){
+        setHover(true);
+        colorClass = "hoverClass"
+    }
 
     function aiTurn() {
         console.log("aiClick()");
@@ -139,7 +143,7 @@ export function Square(props) {
 
     return (
         //change to include  onhover event next
-        <td className={colorClass} id={props.id} onClick={handleClick}>
+        <td className={colorClass} id={props.id} onClick={handleClick} onMouseOver={setMouseOver}>
             <i class={icon}></i>
         </td>
     )

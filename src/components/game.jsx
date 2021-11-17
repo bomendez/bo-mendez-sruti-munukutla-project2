@@ -36,8 +36,6 @@ function Game() {
             return(
                 <div className="container board-wrapper">
                 <h1>Battleship</h1>            
-                
-                
                 <Restart/>
                 <div className="row">
                 <div className='col-3'>

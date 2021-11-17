@@ -236,17 +236,17 @@ export const BoardReducer = (state, action) => {
   }
 }
   if (action.type === RESTART) {
+    //fetch the previous game type and set it
+    let previousGameType = state.gameType.freePlay;
    let newState =  initialStateFunc();
    return {
     ...newState,
     gameType: {
       ...newState.gameType,
-      freePlay: true
+      freePlay: previousGameType
     }
   }
-
   }
-
   if(action.type === SET_GAME_TYPE){
     return {
     ...state,

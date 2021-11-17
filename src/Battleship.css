@@ -168,3 +168,7 @@ a:visited {
     visibility: hidden;
 }
 
+.hoverClass{
+    background-color:black;
+    transition: ease-in-out;
+}
