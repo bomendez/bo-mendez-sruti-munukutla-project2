@@ -2,6 +2,7 @@ import { BOARD_CLICK, RESTART } from "../actions/constants";
 import { AIRCRAFT_CARRIER, SIZE_TEN } from "../components/constants";
 
 function initialStateFunc() {
+  console.log("calling initial state func")
   const initialState = {
     player_zero : {
       clickedSquares: [], // rename to boardSquares
@@ -61,6 +62,7 @@ function initialStateFunc() {
     // initialState.ships.push({ x_coord: randomCol, y_coord: randomRow });
     player_no.ships[shipType] = []
     player_no.ships[shipType].push({ x_coord: randomCol, y_coord: randomRow });
+    console.log("ships of player" , player_no.ships)
     // console.log("updated ships:", shipsOnBoard);
 
     fillRemainingShipSize(randomRow, randomCol, shipSize, shipType, player_no,isVertical);
@@ -99,6 +101,7 @@ function initialStateFunc() {
       if (fillVertical) {
         gridRows[currRow][col] = "ship";
         player_no.ships[shipType].push({ x_coord: col, y_coord: currRow });
+
         currRow++;
       } else {
         gridRows[row][currCol] = "ship";
@@ -129,7 +132,7 @@ function initialStateFunc() {
   }
 
   //initialState.board = gridRows;
-  console.log(initialState);
+  //console.log(initialState);
   return initialState;
 }
 

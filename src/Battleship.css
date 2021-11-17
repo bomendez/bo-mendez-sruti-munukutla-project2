@@ -159,3 +159,11 @@ a:visited {
 .clickedBox{
     background-color: coral;
 }
+
+.WinnerBoard{
+    visibility:visible;
+}
+
+.NoWinner{
+    visibility: hidden;
+}

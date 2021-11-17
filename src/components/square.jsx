@@ -20,7 +20,7 @@ export function Square(props) {
     let listVisitedSquares;
     let opponentShipsOnBoard;
     let opponentListVisitedSquares;
-    console.log(props);
+    //console.log(props);
     //depending on the Board of player, display Board details
     if (props.player_id === '0') {
         shipsOnBoard = board_state.player_zero.ships;
@@ -62,12 +62,11 @@ export function Square(props) {
     }
 
     function handleClick() {
-        console.log("handleClick()");
         let hitShip = setHitOrMiss();
         dispatch(boardClick(props.x_coord, props.y_coord, props.player_id,hitShip));
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
-        console.log("from square.jsx, player is: ", nextTurn)
+        //console.log("from square.jsx, player is: ", nextTurn)
         dispatch(switchTurns(nextTurn));
     }
 
