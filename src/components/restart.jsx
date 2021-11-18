@@ -6,7 +6,7 @@ export function Restart() {
     const dispatch = useDispatch();
 
     function handleClick() {
-        window.localStorage.clear();
+        //window.localStorage.clear();
         dispatch(restart());
 
     }

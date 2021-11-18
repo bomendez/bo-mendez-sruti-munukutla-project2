@@ -25,48 +25,62 @@ export function Square(props) {
     if (props.player_id === '0') {
         shipsOnBoard = board_state.player_zero.ships;
         listVisitedSquares = board_state.player_zero.clickedSquares;
-        opponentShipsOnBoard = board_state.player_one.ships;
-        opponentListVisitedSquares = board_state.player_one.clickedSquares;
+        //opponentShipsOnBoard = board_state.player_one.ships;
+        //opponentListVisitedSquares = board_state.player_one.clickedSquares;
     } else {
         shipsOnBoard = board_state.player_one.ships;
         listVisitedSquares = board_state.player_one.clickedSquares;
-        opponentShipsOnBoard = board_state.player_zero.ships;
-        opponentListVisitedSquares = board_state.player_zero.clickedSquares;
+        //opponentShipsOnBoard = board_state.player_zero.ships;
+        //opponentListVisitedSquares = board_state.player_zero.clickedSquares;
     }
     let colorClass;
     let hoverClass = 'hoverClass';
 
     let icon = "";
 
-    if(unselected){
-        colorClass ='unclicked';
-    }else if(hit){
-        //colorClass = 'highlight';
-        icon = "fa fa-bomb";
-    }else if(miss){
-        colorClass = 'clickedBox';
-        icon = "far fa-check-square";
-    }
-    // }else if(hover){
-    //     colorClass = 'hoverClass';
-    // }
-    //iterate through all squares and check that there is a ship
     for (let ship in shipsOnBoard) {
         //use of == where string and int can be compared
+        // no need to display ships for freeplay, display ships for player's own board
         if (checkCoordinateIsShip(ship) && props.player_id == playerTurn && !isFreePlay) {
             colorClass = 'ship';
             icon = "fa fa-ship";
         }
     }
 
-    if(isFreePlay){
-        for (let ship in shipsOnBoard){
+    if (unselected) {
+        colorClass = 'unclicked';
+    } else if (hit) {
+        colorClass = 'hitSquare';
+        icon = "fa fa-bomb";
+    } else if (miss) {
+        colorClass = 'clickedBox';
+        icon = "fa fa-check-square";
+    }
+
+
+
+    //helper function to check co-ordinate/square has ship
+    function checkCoordinateIsShip(ship) {
+        if (shipsOnBoard[ship].some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
+            return true;
+        }
+        return false;
+    }
+
+    //iterate through all squares and set board visibilities based on current player & board id
+
+
+    //for free play, dont diplay ships at all
+    if (isFreePlay) {
+        for (let ship in shipsOnBoard) {
             if (checkCoordinateIsShip(ship)) {
-                colorClass = 'unclicked';
+                if (unselected) {
+                    colorClass = 'unclicked';
+                }
             }
         }
     }
-    
+
     // for (let ship in opponentShipsOnBoard) {
     //     if (checkCoordinateIsShip(ship)) {
     //         //colorClass = 'ship';
@@ -80,30 +94,24 @@ export function Square(props) {
     //     if (checkCoordinateIsShip(ship)) {
     //         colorClass = 'ship';
     //         icon = "fa fa-ship";
-        
+
     //     }
     // }
 
     //check if the clicked co-ordinate is a ship on currently active board
-    function checkCoordinateIsShip(ship) {
-        if (shipsOnBoard[ship].some(e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
-            return true;
-        }
-        return false;
-    }
+
 
     //set diplay based on board state
-    
+
     //on hover event handler state change to be added
     // }else if(hover){
     // }
-   
-    function setMouseEnter(){
+
+    function setMouseEnter() {
         setHover(true);
-        // colorClass = "hoverClass"
     }
 
-    function setMouseLeave(){
+    function setMouseLeave() {
         setHover(false)
     }
 
@@ -118,11 +126,11 @@ export function Square(props) {
         }
         let hitShip = setHitOrMiss();
         dispatch(boardClick(x, y, "1", hitShip));
-        
+
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
-            console.log("from square.jsx, player is: ai", nextTurn)
-            changePlayer(nextTurn);
+        console.log("from square.jsx, player is: ai", nextTurn)
+        changePlayer(nextTurn);
     }
 
     function changePlayer(nextTurn) {
@@ -131,18 +139,22 @@ export function Square(props) {
 
     function handleClick() {
         let hitShip = setHitOrMiss();
-        dispatch(boardClick(props.x_coord, props.y_coord, props.player_id,hitShip));
-        if(!isFreePlay){
-            let nextTurn = playerTurn === 0 ? 1 : 0;
-            changePlayer(nextTurn);
-        }
-        setUnselected(false);
+        //if sqaure is already selected, ignore further actions/clicks
+        if (unselected) {
+            dispatch(boardClick(props.x_coord, props.y_coord, props.player_id, hitShip));
 
+            //for free play, no need to switch turns since there is only one player
+            if (!isFreePlay) {
+                let nextTurn = playerTurn === 0 ? 1 : 0;
+                changePlayer(nextTurn);
+            }
+            setUnselected(false);
+        }
         // console.log("from square.jsx, player is: ", nextTurn)
         // dispatch(switchTurns(nextTurn));
 
         // if (playerTurn === 0) {
-            
+
         // }
         // aiTurn();
     }
@@ -152,8 +164,8 @@ export function Square(props) {
         console.log("AI check x:", x_coord, "y:", y_coord)
         if (board_state.player_one.clickedSquares.some(
             e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
-                console.log("AI check already selected")
-                return false;
+            console.log("AI check already selected")
+            return false;
         }
         console.log("AI check unselected")
         return true;
@@ -182,7 +194,7 @@ export function Square(props) {
 
     return (
         //change to include  onhover event next
-        <td className={hover ? hoverClass + " " + colorClass: colorClass} id={props.id} onClick={handleClick} onMouseEnter={setMouseEnter} onMouseLeave={setMouseLeave}>
+        <td className={hover ? hoverClass : colorClass} id={props.id} onClick={handleClick} onMouseEnter={setMouseEnter} onMouseLeave={setMouseLeave}>
             <i class={icon}></i>
         </td>
     )
