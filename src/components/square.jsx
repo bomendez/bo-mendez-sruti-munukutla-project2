@@ -32,6 +32,7 @@ export function Square(props) {
         listVisitedSquares = board_state.player_one.clickedSquares;
         opponentShipsOnBoard = board_state.player_zero.ships;
         opponentListVisitedSquares = board_state.player_zero.clickedSquares;
+        
     }
     let colorClass = 'unclicked';
 
@@ -75,22 +76,14 @@ export function Square(props) {
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
         console.log("from square.jsx, player is: ai", nextTurn)
-        changePlayer(nextTurn);
-    }
-
-    function changePlayer(nextTurn) {
-        // dispatch(switchTurns(nextTurn));
     }
 
     function handleClick() {
         console.log("handleClick()");
         let hitShip = setHitOrMiss();
-        dispatch(boardClick(props.x_coord, props.y_coord, 0, hitShip));
+        dispatch(boardClick(props.x_coord, props.y_coord, 1, hitShip));
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
-        changePlayer(nextTurn);
-        
-        // aiTurn();
     }
 
     // Helper function that checks whether a square is unselected
@@ -122,22 +115,14 @@ export function Square(props) {
         return false;
     }
 
-    function handleAI() {
-
-    }
-    if (playerTurn === "test") {
+    if (playerTurn === 1) {
         aiTurn();
-        // dispatch(switchTurns());
     }
+
     return (
         //change to include  onhover event next
         <td className={colorClass} id={props.id} onClick={() => handleClick()}>
             <i class={icon}></i>
         </td>
     )
-
-    // makeSquareVisited(){
-    //     this.setState({visited: true});
-    //     document.getElementById(this.props.id).style.backgroundColor = "coral";
-    // }
 }
