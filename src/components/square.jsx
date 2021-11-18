@@ -10,7 +10,7 @@ export function Square(props) {
     const [hit, setHit] = useState(false);
     const [miss, setMiss] = useState(false);
     const [hover, setHover] = useState(false);
-
+    const isFreePlay = useSelector(state => state.BoardReducer.gameType.freePlay);
     const dispatch = useDispatch();
 
     const board_state = useSelector(state => state.BoardReducer);
@@ -34,16 +34,55 @@ export function Square(props) {
         opponentListVisitedSquares = board_state.player_zero.clickedSquares;
     }
     let colorClass;
+    let hoverClass = 'hoverClass';
 
     let icon = "";
 
+    if(unselected){
+        colorClass ='unclicked';
+    }else if(hit){
+        //colorClass = 'highlight';
+        icon = "fa fa-bomb";
+    }else if(miss){
+        colorClass = 'clickedBox';
+        icon = "far fa-check-square";
+    }
+    // }else if(hover){
+    //     colorClass = 'hoverClass';
+    // }
     //iterate through all squares and check that there is a ship
     for (let ship in shipsOnBoard) {
-        if (checkCoordinateIsShip(ship)) {
+        //use of == where string and int can be compared
+        if (checkCoordinateIsShip(ship) && props.player_id == playerTurn && !isFreePlay) {
             colorClass = 'ship';
             icon = "fa fa-ship";
         }
     }
+
+    if(isFreePlay){
+        for (let ship in shipsOnBoard){
+            if (checkCoordinateIsShip(ship)) {
+                colorClass = 'unclicked';
+            }
+        }
+    }
+    
+    // for (let ship in opponentShipsOnBoard) {
+    //     if (checkCoordinateIsShip(ship)) {
+    //         //colorClass = 'ship';
+    //         //icon = "fa fa-ship";
+    //         colorClass = 'unclicked';
+    //         icon = '';
+    //     }
+    // }
+
+    // for (let ship in shipsOnBoard) {
+    //     if (checkCoordinateIsShip(ship)) {
+    //         colorClass = 'ship';
+    //         icon = "fa fa-ship";
+        
+    //     }
+    // }
 
     //check if the clicked co-ordinate is a ship on currently active board
     function checkCoordinateIsShip(ship) {
@@ -54,22 +93,18 @@ export function Square(props) {
     }
 
     //set diplay based on board state
-    if(unselected){
-        colorClass ='unclicked';
-    }else if(hit){
-        // colorClass = 'highlight';
-        icon = "fa fa-bomb";
-    }else if(miss){
-        colorClass = 'clickedBox';
-        icon = "far fa-check-square";
-    }
+    
     //on hover event handler state change to be added
     // }else if(hover){
     // }
    
-    function setMouseOver(){
+    function setMouseEnter(){
         setHover(true);
-        colorClass = "hoverClass"
+        // colorClass = "hoverClass"
+    }
+
+    function setMouseLeave(){
+        setHover(false)
     }
 
     function aiTurn() {
@@ -83,10 +118,11 @@ export function Square(props) {
         }
         let hitShip = setHitOrMiss();
         dispatch(boardClick(x, y, "1", hitShip));
+        
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
-        console.log("from square.jsx, player is: ai", nextTurn)
-        changePlayer(nextTurn);
+            console.log("from square.jsx, player is: ai", nextTurn)
+            changePlayer(nextTurn);
     }
 
     function changePlayer(nextTurn) {
@@ -96,9 +132,12 @@ export function Square(props) {
     function handleClick() {
         let hitShip = setHitOrMiss();
         dispatch(boardClick(props.x_coord, props.y_coord, props.player_id,hitShip));
-        let nextTurn = playerTurn === 0 ? 1 : 0;
+        if(!isFreePlay){
+            let nextTurn = playerTurn === 0 ? 1 : 0;
+            changePlayer(nextTurn);
+        }
         setUnselected(false);
-        changePlayer(nextTurn);
+
         // console.log("from square.jsx, player is: ", nextTurn)
         // dispatch(switchTurns(nextTurn));
 
@@ -143,7 +182,7 @@ export function Square(props) {
 
     return (
         //change to include  onhover event next
-        <td className={colorClass} id={props.id} onClick={handleClick} onMouseOver={setMouseOver}>
+        <td className={hover ? hoverClass + " " + colorClass: colorClass} id={props.id} onClick={handleClick} onMouseEnter={setMouseEnter} onMouseLeave={setMouseLeave}>
             <i class={icon}></i>
         </td>
     )

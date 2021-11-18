@@ -36,3 +36,8 @@
 .fa-ship {
     color: rgb(44, 135, 192);
 }
+
+.hoverClass{
+    background-color:rgb(42, 134, 161);
+    transition: ease-in-out;
+}

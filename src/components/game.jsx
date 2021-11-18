@@ -38,18 +38,15 @@ function Game() {
                 <h1>Battleship</h1>            
                 <Restart/>
                 <div className="row">
-                <div className='col-3'>
-                <div className="ScoreBoard">ScoreBoard: 
-                Player: {playerTurn} <span> </span>
-                Score: {playerTurn === 0 ? (17 - boardStats.player_one.score): (17- boardStats.player_zero.score)}</div>
-                <div className={winnerBoardClass}>Player {playerZeroWins ? 0 : 1} wins the game</div>
-                    </div>
-                    <div className='col-6'>
-                        <Board player_id ="0"/>
-                    </div>
-                    {/* <div className={'col-6 ' + rightClassStat}>
-                        <Board player_id="1"/>
-                    </div> */}
+                <div className="col-lg-3 col-md-12 col-sm-12">
+                    <h1>Scoreboard</h1>
+                    <div className="ScoreBoard">          
+                    Ships Hit: {(17- boardStats.player_zero.score)}</div>
+                    <div className={winnerBoardClass}> Congratulations! You hit all ships</div>
+                </div>
+                <div className="col-lg-9 col-md-12 col-sm-12">
+                    <Board player_id ="0"/>
+                </div>
                 </div>
             </div>);
         }else{
@@ -63,10 +60,11 @@ function Game() {
             <div className={winnerBoardClass}>Player {playerZeroWins ? 0 : 1} wins the game</div>
             <Restart/>
             <div className="row">
-                <div className={'col-6 ' + leftClassStat}>
+                <div className={'col-lg-6 col-md-12 col-sm-12 ' + leftClassStat}>
                     <Board player_id ="0"/>
                 </div>
-                <div className={'col-6 ' + rightClassStat}>
+                
+                <div className={'col-lg-6 col-md-12 col-sm-12 ' + rightClassStat}>
                     <Board player_id="1"/>
                 </div>
             </div>

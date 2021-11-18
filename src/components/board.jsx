@@ -21,9 +21,11 @@ function Board(props) {
   }
 
   return (
+    <div class="table-responsive">
     <table className="board-class">
       <tbody>{board}</tbody>
     </table>
+    </div>
   );
 }
 

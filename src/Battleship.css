@@ -126,10 +126,10 @@ a:visited {
     color: white;
 }
 
-.board-class{
+/* .board-class{
     display: flex;
     justify-content: center;
-}
+} */
 
 .ships-display{
     display: flex;
@@ -168,7 +168,3 @@ a:visited {
     visibility: hidden;
 }
 
-.hoverClass{
-    background-color:black;
-    transition: ease-in-out;
-}
