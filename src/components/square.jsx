@@ -22,7 +22,7 @@ export function Square(props) {
     let opponentListVisitedSquares;
 
     //depending on the Board of player, display Board details
-    if (props.player_id === '0') {
+    if (props.player_id === 0) {
         shipsOnBoard = board_state.player_zero.ships;
         listVisitedSquares = board_state.player_zero.clickedSquares;
         //opponentShipsOnBoard = board_state.player_one.ships;
@@ -30,8 +30,8 @@ export function Square(props) {
     } else {
         shipsOnBoard = board_state.player_one.ships;
         listVisitedSquares = board_state.player_one.clickedSquares;
-        //opponentShipsOnBoard = board_state.player_zero.ships;
-        //opponentListVisitedSquares = board_state.player_zero.clickedSquares;
+        opponentShipsOnBoard = board_state.player_zero.ships;
+        opponentListVisitedSquares = board_state.player_zero.clickedSquares;
     }
     let colorClass;
     let hoverClass = 'hoverClass';
@@ -81,32 +81,6 @@ export function Square(props) {
         }
     }
 
-    // for (let ship in opponentShipsOnBoard) {
-    //     if (checkCoordinateIsShip(ship)) {
-    //         //colorClass = 'ship';
-    //         //icon = "fa fa-ship";
-    //         colorClass = 'unclicked';
-    //         icon = '';
-    //     }
-    // }
-
-    // for (let ship in shipsOnBoard) {
-    //     if (checkCoordinateIsShip(ship)) {
-    //         colorClass = 'ship';
-    //         icon = "fa fa-ship";
-
-    //     }
-    // }
-
-    //check if the clicked co-ordinate is a ship on currently active board
-
-
-    //set diplay based on board state
-
-    //on hover event handler state change to be added
-    // }else if(hover){
-    // }
-
     function setMouseEnter() {
         setHover(true);
     }
@@ -124,18 +98,30 @@ export function Square(props) {
             x = getRandomInteger(10)
             y = getRandomInteger(10)
         }
-        let hitShip = setHitOrMiss();
-        dispatch(boardClick(x, y, "1", hitShip));
+        let hitShip = setHitorMissForOpponent();
+        dispatch(boardClick(x, y, 0, hitShip));
 
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
-        console.log("from square.jsx, player is: ai", nextTurn)
-        changePlayer(nextTurn);
+        console.log("from square.jsx, player is: ai", 0)
+        console.log("current player turn from ai:", playerTurn)
+        changePlayer(0);
     }
 
     function changePlayer(nextTurn) {
         dispatch(switchTurns(nextTurn));
     }
+
+    // playerTurn 0: User
+    // handleClick for board1, dispatches with player_id 1
+        // places square
+        // switch turn
+
+    // playerTurn 1: AI
+    // get random square
+    // dispatch event with player_id 0
+    // switch turn
+
 
     function handleClick() {
         let hitShip = setHitOrMiss();
@@ -147,6 +133,9 @@ export function Square(props) {
             if (!isFreePlay) {
                 let nextTurn = playerTurn === 0 ? 1 : 0;
                 changePlayer(nextTurn);
+                if (playerTurn == 1) {
+                    aiTurn();
+                }
             }
             setUnselected(false);
         }
@@ -162,7 +151,7 @@ export function Square(props) {
     // Helper function that checks whether a square is unselected
     function isUnselected(x_coord, y_coord) {
         console.log("AI check x:", x_coord, "y:", y_coord)
-        if (board_state.player_one.clickedSquares.some(
+        if (board_state.player_zero.clickedSquares.some(
             e => e.x_coord === props.x_coord && e.y_coord === props.y_coord)) {
             console.log("AI check already selected")
             return false;
@@ -175,6 +164,17 @@ export function Square(props) {
     // 0 and a given maxInt
     function getRandomInteger(maxInt) {
         return Math.floor(Math.random() * maxInt);
+    }
+
+    function setHitorMissForOpponent() {
+        for (let ship in opponentShipsOnBoard) {
+            if (checkCoordinateIsShip(ship)) {
+                setHit(true);
+                return true;
+            }
+        }
+        setMiss(true);
+        return false;
     }
 
     function setHitOrMiss() {

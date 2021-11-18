@@ -187,7 +187,7 @@ export const BoardReducer = (state, action) => {
   //if board is clicked,
   if (action.type === BOARD_CLICK){
     //get the current player
-    if(action.payload.player_id === '0'){
+    if(action.payload.player_id === 0){
       player_no = state.player_one;
       //get the opponent player since their state/squares need to be changed
       opponent_player = state.player_zero;
@@ -202,7 +202,7 @@ export const BoardReducer = (state, action) => {
         e.x_coord === action.payload.x_coord &&
         e.y_coord === action.payload.y_coord
     )){
-    if(action.payload.player_id === '0'){
+    if(action.payload.player_id === 0){
       //if player is player_zero, need to update the clicked squares of player one
       // and the score of player_zero if a shit has been hit
       return {
