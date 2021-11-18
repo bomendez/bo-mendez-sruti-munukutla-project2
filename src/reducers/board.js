@@ -81,11 +81,9 @@ function initialStateFunc() {
     for (let i = 0; i < length; i++) {
       if (fillVertical) {
         player_no.ships[shipType].push({ x_coord: col, y_coord: currRow });
-        console.log("add vertical ship at", col, currRow)
         currRow++;
       } else {
         player_no.ships[shipType].push({ x_coord: currCol, y_coord: row });
-        console.log("add horizontal ship at", currCol, row)
         currCol++;
       }
     }
@@ -170,6 +168,7 @@ const ships = {
   
 // REDUCER STARTS HERE
 export const BoardReducer = (state, action) => {
+  console.log("Board Reducer")
   if (state === undefined) {
     return initialStateFunc();
   }
@@ -178,7 +177,7 @@ export const BoardReducer = (state, action) => {
   //if board is clicked,
   if (action.type === BOARD_CLICK){
     //get the current player
-    if(action.payload.player_id === '0'){
+    if(action.payload.player_id === 0){
       player_no = state.player_one;
       //get the opponent player since their state/squares need to be changed
       opponent_player = state.player_zero;
@@ -193,7 +192,7 @@ export const BoardReducer = (state, action) => {
         e.x_coord === action.payload.x_coord &&
         e.y_coord === action.payload.y_coord
     )){
-    if(action.payload.player_id === '0'){
+    if(action.payload.player_id === 0){
       //if player is player_zero, need to update the clicked squares of player one
       // and the score of player_zero if a shit has been hit
       return {

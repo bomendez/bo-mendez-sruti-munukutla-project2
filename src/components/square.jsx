@@ -22,7 +22,7 @@ export function Square(props) {
     let opponentListVisitedSquares;
     // console.log(props);
     //depending on the Board of player, display Board details
-    if (props.player_id === '0') {
+    if (props.player_id === 0) {
         shipsOnBoard = board_state.player_zero.ships;
         listVisitedSquares = board_state.player_zero.clickedSquares;
         opponentShipsOnBoard = board_state.player_one.ships;
@@ -71,7 +71,7 @@ export function Square(props) {
             y = getRandomInteger(10)
         }
         let hitShip = setHitOrMiss();
-        dispatch(boardClick(x, y, "1", hitShip));
+        dispatch(boardClick(x, y, 1, hitShip));
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
         console.log("from square.jsx, player is: ai", nextTurn)
@@ -79,22 +79,17 @@ export function Square(props) {
     }
 
     function changePlayer(nextTurn) {
-        dispatch(switchTurns(nextTurn));
+        // dispatch(switchTurns(nextTurn));
     }
 
     function handleClick() {
         console.log("handleClick()");
         let hitShip = setHitOrMiss();
-        dispatch(boardClick(props.x_coord, props.y_coord, props.player_id,hitShip));
+        dispatch(boardClick(props.x_coord, props.y_coord, 0, hitShip));
         let nextTurn = playerTurn === 0 ? 1 : 0;
         setUnselected(false);
         changePlayer(nextTurn);
-        // console.log("from square.jsx, player is: ", nextTurn)
-        // dispatch(switchTurns(nextTurn));
-
-        // if (playerTurn === 0) {
-            
-        // }
+        
         // aiTurn();
     }
 
@@ -130,10 +125,13 @@ export function Square(props) {
     function handleAI() {
 
     }
-
+    if (playerTurn === "test") {
+        aiTurn();
+        // dispatch(switchTurns());
+    }
     return (
         //change to include  onhover event next
-        <td className={colorClass} id={props.id} onClick={handleClick}>
+        <td className={colorClass} id={props.id} onClick={() => handleClick()}>
             <i class={icon}></i>
         </td>
     )

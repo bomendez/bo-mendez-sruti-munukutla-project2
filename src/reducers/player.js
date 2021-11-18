@@ -1,4 +1,4 @@
-import {SWITCH_TURNS} from '../actions/constants';
+import {SWITCH_TURNS, BOARD_CLICK} from '../actions/constants';
 let initialState = {
     player_turn: 0
 }
@@ -9,6 +9,16 @@ export const PlayerReducer = (state=initialState, action) => {
         return{
             ...state,
             player_turn : action.payload
+        }
+    }
+    if (action.type === BOARD_CLICK) {
+        let nextPlayer = 1
+        if (action.payload.player_id === 1) {
+            nextPlayer = 0
+        }
+        return{
+            ...state,
+            player_turn : nextPlayer
         }
     }
     return state;

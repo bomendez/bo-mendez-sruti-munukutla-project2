@@ -28,10 +28,10 @@ function Game() {
             <Restart/>
             <div className="row">
                 <div className={'col-6 ' + leftClassStat}>
-                    <Board player_id ="0"/>
+                    <Board player_id ={0}/>
                 </div>
                 <div className={'col-6 ' + rightClassStat}>
-                    <Board player_id="1"/>
+                    <Board player_id={1}/>
                 </div>
             </div>
         </div>);
