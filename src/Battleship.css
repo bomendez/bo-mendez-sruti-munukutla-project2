@@ -126,10 +126,10 @@ a:visited {
     color: white;
 }
 
-.board-class{
+/* .board-class{
     display: flex;
     justify-content: center;
-}
+} */
 
 .ships-display{
     display: flex;
@@ -156,6 +156,12 @@ a:visited {
     background-color: red;
 }
 
-.clickedBox{
-    background-color: coral;
+
+.WinnerBoard{
+    visibility:visible;
 }
+
+.NoWinner{
+    visibility: hidden;
+}
+

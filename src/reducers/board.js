@@ -1,8 +1,13 @@
-import { BOARD_CLICK, RESTART } from "../actions/constants";
+import { BOARD_CLICK, RESTART, SET_GAME_TYPE } from "../actions/constants";
 import { AIRCRAFT_CARRIER, SIZE_TEN } from "../components/constants";
 
 function initialStateFunc() {
+  console.log("calling initial state func")
   const initialState = {
+    //gameType: '',
+    gameType: {
+      freePlay: false,
+    },
     player_zero : {
       clickedSquares: [], // rename to boardSquares
       ships: {},
@@ -30,7 +35,9 @@ function initialStateFunc() {
   function putShipsOnBoard() {
     for(let ship in ships){
       placeOneShip(ship, ships[ship], initialState.player_zero)
-      placeOneShip(ship, ships[ship], initialState.player_one)
+      if(!initialState.gameType.freePlay){
+        placeOneShip(ship, ships[ship], initialState.player_one)
+      }
     }
   }
 
@@ -52,7 +59,7 @@ function initialStateFunc() {
       fillShip(randomRow, randomCol, shipSize, shipType, player_no, isVertical);
     }
     // initialState.ships.push({ x_coord: randomCol, y_coord: randomRow });
-    
+
   }
 
   // Validates whether the ship overlaps an existing ship in the given player's
@@ -81,6 +88,7 @@ function initialStateFunc() {
     for (let i = 0; i < length; i++) {
       if (fillVertical) {
         player_no.ships[shipType].push({ x_coord: col, y_coord: currRow });
+
         console.log("add vertical ship at", col, currRow)
         currRow++;
       } else {
@@ -153,6 +161,7 @@ function initialStateFunc() {
   function getRandomInteger(maxInt) {
     return Math.floor(Math.random() * maxInt);
   }
+
 
   console.log(initialState);
   return initialState;
@@ -227,7 +236,25 @@ export const BoardReducer = (state, action) => {
   }
 }
   if (action.type === RESTART) {
-    return initialStateFunc();
+    //fetch the previous game type and set it
+    let previousGameType = state.gameType.freePlay;
+   let newState =  initialStateFunc();
+   return {
+    ...newState,
+    gameType: {
+      ...newState.gameType,
+      freePlay: previousGameType
+    }
+  }
+  }
+  if(action.type === SET_GAME_TYPE){
+    return {
+    ...state,
+    gameType : {
+      ...state.gameType,
+      freePlay: action.payload.gameType === "free"? true: false
+    }
+    }
   }
   return state;
 };

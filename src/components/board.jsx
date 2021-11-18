@@ -15,14 +15,17 @@ function Board(props) {
       }
       gridRows.push(<tr>{rowSquares}</tr>);
     }
+
     // console.log(gridRows);
     return gridRows;
   }
 
   return (
+    <div class="table-responsive">
     <table className="board-class">
       <tbody>{board}</tbody>
     </table>
+    </div>
   );
 }
 
