@@ -5,7 +5,7 @@ let initialState = {
 
 export const PlayerReducer = (state=initialState, action) => {
     if(action.type === SWITCH_TURNS){
-        console.log("player turn is", state.player_turn);
+        // console.log("player turn is", state.player_turn);
         return{
             ...state,
             player_turn : action.payload

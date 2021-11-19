@@ -1,15 +1,73 @@
 import React, { Component } from 'react';
 import Board from './board.jsx';
 import Restart from './restart.jsx';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { switchTurns } from '../actions/player';
+import { boardClick } from '../actions/board';
 
  
 function Game() {
         const boardStats = useSelector(state => state.BoardReducer);
         const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
         const isFreePlay = useSelector(state => state.BoardReducer.gameType.freePlay);
+    const board_state = useSelector(state => state.BoardReducer);
         //winner logic
+
+        const dispatch = useDispatch();
+
+        function getRandomInteger(maxInt) {
+            return Math.floor(Math.random() * maxInt);
+          }
+        
+          function isSelected(x_coord, y_coord) {
+            console.log("AI check x:", x_coord, "y:", y_coord)
+            if (board_state.player_zero.clickedSquares.some(
+                e => e.x_coord === x_coord && e.y_coord === y_coord)) {
+                console.log("AI check already selected")
+                return true;
+            }
+            console.log("AI check unselected")
+            return false;
+        }
+        
+        
+        function checkCoordinateIsShip(x, y) {
+          let opponentShips = board_state.player_zero.ships;
+          for(let ship in opponentShips){
+            if (opponentShips[ship].some(e => e.x_coord === x && e.y_coord === y)) {
+                return true;
+            }
+          }
+            return false;
+          }
+        
+          function aiTurn() {
+            console.log("aiClick()");
+            // let x = getRandomInteger(10)
+            // let y = getRandomInteger(10)
+            let x = 7;
+            let y = 7;
+            //let result = isSelected(7, 8);
+            // while (!result) {
+            //     // get random number unselected
+            //     x = getRandomInteger(10)
+            //     y = getRandomInteger(10)
+            //     result = isSelected(x,y)
+            // }
+            let hitShip = checkCoordinateIsShip(x, y);
+            dispatch(boardClick(x, y, "0", hitShip));
+            setTimeout(function() {
+                //your code to be executed after 1 second
+                let nextTurn = playerTurn === 0 ? 1 : 0;
+                dispatch(switchTurns(nextTurn));
+              }, 2000);
+            //console.log("ai played from board.jsx, player is: player ", playerTurn, 'board is:', props.player_id)
+          }
+        
+          if(playerTurn == 1){
+            aiTurn();
+          }
+        
         let playerZeroWins = false;
         let playerOneWins = false;
         let player_one_score = boardStats.player_one.score;

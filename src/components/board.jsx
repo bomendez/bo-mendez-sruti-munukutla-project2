@@ -1,9 +1,13 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Square } from "./square";
+
+
 
 function Board(props) {
   const board = initializeBoardState();
-    
+  
+
   function initializeBoardState() {
     let gridRows = [];
     let id = 0;
@@ -19,6 +23,7 @@ function Board(props) {
     // console.log(gridRows);
     return gridRows;
   }
+
 
   return (
     <div class="table-responsive">
