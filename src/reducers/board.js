@@ -204,12 +204,12 @@ export const BoardReducer = (state, action) => {
     )){
     if(action.payload.player_id === 0){
       //if player is player_zero, need to update the clicked squares of player one
-      // and the score of player_zero if a shit has been hit
+      // and the score of player_zero if a ship has been hit
       return {
           ...state,
           player_zero:{
             ...state.player_zero,
-            clickedSquares : state.player_zero.clickedSquares.concat(
+            clickedSquares : state.player_one.clickedSquares.concat(
               {
                 x_coord: action.payload.x_coord,
                 y_coord: action.payload.y_coord,
@@ -223,7 +223,7 @@ export const BoardReducer = (state, action) => {
         ...state,
         player_one:{
           ...state.player_one,
-          clickedSquares : state.player_one.clickedSquares.concat(
+          clickedSquares : state.player_zero.clickedSquares.concat(
             {
               x_coord: action.payload.x_coord,
               y_coord: action.payload.y_coord,

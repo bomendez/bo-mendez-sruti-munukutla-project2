@@ -99,17 +99,10 @@ export function Square(props) {
             y = getRandomInteger(10)
         }
         let hitShip = setHitorMissForOpponent();
-        dispatch(boardClick(x, y, 0, hitShip));
-
-        let nextTurn = playerTurn === 0 ? 1 : 0;
-        setUnselected(false);
-        console.log("from square.jsx, player is: ai", 0)
         console.log("current player turn from ai:", playerTurn)
-        changePlayer(0);
-    }
+        dispatch(boardClick(x, y, 0, hitShip));
+        setUnselected(false);
 
-    function changePlayer(nextTurn) {
-        dispatch(switchTurns(nextTurn));
     }
 
     // playerTurn 0: User
@@ -127,25 +120,20 @@ export function Square(props) {
         let hitShip = setHitOrMiss();
         //if sqaure is already selected, ignore further actions/clicks
         if (unselected) {
-            dispatch(boardClick(props.x_coord, props.y_coord, props.player_id, hitShip));
+            dispatch(boardClick(props.x_coord, props.y_coord, 1, hitShip));
 
             //for free play, no need to switch turns since there is only one player
             if (!isFreePlay) {
                 let nextTurn = playerTurn === 0 ? 1 : 0;
-                changePlayer(nextTurn);
-                if (playerTurn == 1) {
+                // playerTurn has not yet been changed in dispatch at the time we use it here
+                console.log("handleClick playerTurn:", playerTurn)
+                // if (playerTurn == 1) {
                     aiTurn();
-                }
+                // }
             }
+            console.log("from square.jsx, player is user:", playerTurn)
             setUnselected(false);
         }
-        // console.log("from square.jsx, player is: ", nextTurn)
-        // dispatch(switchTurns(nextTurn));
-
-        // if (playerTurn === 0) {
-
-        // }
-        // aiTurn();
     }
 
     // Helper function that checks whether a square is unselected
