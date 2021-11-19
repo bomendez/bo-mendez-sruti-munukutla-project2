@@ -10,7 +10,8 @@ function Game() {
         const boardStats = useSelector(state => state.BoardReducer);
         const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
         const isFreePlay = useSelector(state => state.BoardReducer.gameType.freePlay);
-    const board_state = useSelector(state => state.BoardReducer);
+        const board_state = useSelector(state => state.BoardReducer);
+        const aiPlayed = useSelector(state => state.BoardReducer.player_one.aiPlayed)
         //winner logic
 
         const dispatch = useDispatch();
@@ -42,18 +43,17 @@ function Game() {
           }
         
           function aiTurn() {
-            console.log("aiClick()");
-            // let x = getRandomInteger(10)
-            // let y = getRandomInteger(10)
-            let x = 7;
-            let y = 7;
-            //let result = isSelected(7, 8);
-            // while (!result) {
-            //     // get random number unselected
-            //     x = getRandomInteger(10)
-            //     y = getRandomInteger(10)
-            //     result = isSelected(x,y)
-            // }
+            //console.log("aiClick()");
+            let x = getRandomInteger(10)
+            let y = getRandomInteger(10)
+    
+            let result = isSelected(x, y);
+            while (!result) {
+                // get random number unselected
+                x = getRandomInteger(10)
+                y = getRandomInteger(10)
+                result = isSelected(x,y)
+            }
             let hitShip = checkCoordinateIsShip(x, y);
             dispatch(boardClick(x, y, "0", hitShip));
             setTimeout(function() {
@@ -64,7 +64,7 @@ function Game() {
             //console.log("ai played from board.jsx, player is: player ", playerTurn, 'board is:', props.player_id)
           }
         
-          if(playerTurn == 1){
+          if(playerTurn == 1 && !aiPlayed){
             aiTurn();
           }
         

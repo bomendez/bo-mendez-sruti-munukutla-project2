@@ -16,7 +16,7 @@ export function Square(props) {
 
     const board_state = useSelector(state => state.BoardReducer);
     const playerTurn = useSelector(state => state.PlayerReducer.player_turn);
-
+    const aiPlayed = board_state.player_one.aiPlayed;
     let shipsOnBoard;
     let listVisitedSquares;
     let opponentShipsOnBoard;
@@ -30,12 +30,7 @@ export function Square(props) {
         listVisitedSquares = board_state.player_zero.clickedSquares;
         //opponentShipsOnBoard = board_state.player_one.ships;
         //opponentListVisitedSquares = board_state.player_one.clickedSquares;
-        let lastInserted = listVisitedSquares[listVisitedSquares.length-1];
-        console.log("lastInserted", lastInserted)
-        // if(lastInserted){
-        // if(props.x_coord === lastInserted.x_coord && props.y_coord === lastInserted.y_coord){
-        //     setUnselected(false)
-        // }}
+        
     } else {
         shipsOnBoard = board_state.player_one.ships;
         listVisitedSquares = board_state.player_one.clickedSquares;
@@ -72,6 +67,16 @@ export function Square(props) {
     } else if (miss) {
         colorClass = 'clickedBox';
         icon = "fa fa-check-square";
+    }
+
+
+    let lastInserted = listVisitedSquares[listVisitedSquares.length-1];
+        console.log("lastInserted", lastInserted)
+        if(props.player_id==="0" && aiPlayed){
+            if(props.x_coord === lastInserted.x_coord && props.y_coord === lastInserted.y_coord){
+                dispatch(switchTurns(1))
+                setUnselected(false)
+            }
     }
 
 

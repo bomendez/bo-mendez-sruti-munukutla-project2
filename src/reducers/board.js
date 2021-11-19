@@ -1,4 +1,4 @@
-import { BOARD_CLICK, RESTART, SET_GAME_TYPE } from "../actions/constants";
+import { BOARD_CLICK, RESTART, SET_GAME_TYPE, SWITCH_TURNS } from "../actions/constants";
 import { AIRCRAFT_CARRIER, SIZE_TEN } from "../components/constants";
 
 function initialStateFunc() {
@@ -22,7 +22,8 @@ function initialStateFunc() {
       ships: {},
       isActive: false,
       score: 17,
-      declareWinner: false
+      declareWinner: false,
+      aiPlayed: false
       //same between both boards:
       // ships -> my ships: Since ships has state Hit/Unselected, we would know which ones have been hit or Unselected
     }
@@ -215,7 +216,12 @@ export const BoardReducer = (state, action) => {
                 y_coord: action.payload.y_coord,
               }
             ),
-            score: action.payload.hitShip ? state.player_zero.score - 1 :  state.player_zero.score
+            score: action.payload.hitShip ? state.player_zero.score - 1 :  state.player_zero.score,
+          },
+          //when clicked on board 0, set ai played to true to enable state changes for respective square
+          player_one : {
+            ...state.player_one,
+            aiPlayed: true
           }
         }
     }else{
@@ -255,6 +261,18 @@ export const BoardReducer = (state, action) => {
       freePlay: action.payload.gameType === "free"? true: false
     }
     }
+  }
+  //if switching turns and board to played is for player 0, setaiPlayed to false, since AI needs to play next
+  if(action.type === SWITCH_TURNS && action.payload==0){
+    return {
+    ...state,
+    player_one :{
+      ...state.player_one,
+      aiPlayed : false
+    }
+    
+    }
+
   }
   return state;
 };
