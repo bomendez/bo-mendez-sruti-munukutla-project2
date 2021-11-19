@@ -74,7 +74,7 @@ export function Square(props) {
         console.log("lastInserted", lastInserted)
         if(props.player_id==="0" && aiPlayed){
             if(props.x_coord === lastInserted.x_coord && props.y_coord === lastInserted.y_coord){
-                dispatch(switchTurns(1))
+                dispatch(switchTurns(0))
                 setUnselected(false)
             }
     }

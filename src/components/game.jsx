@@ -20,16 +20,17 @@ function Game() {
             return Math.floor(Math.random() * maxInt);
           }
         
-          function isSelected(x_coord, y_coord) {
+          function isUnselected(x_coord, y_coord) {
             console.log("AI check x:", x_coord, "y:", y_coord)
             if (board_state.player_zero.clickedSquares.some(
                 e => e.x_coord === x_coord && e.y_coord === y_coord)) {
                 console.log("AI check already selected")
-                return true;
+                return false;
             }
             console.log("AI check unselected")
-            return false;
+            return true;
         }
+    
         
         
         function checkCoordinateIsShip(x, y) {
@@ -47,20 +48,14 @@ function Game() {
             let x = getRandomInteger(10)
             let y = getRandomInteger(10)
     
-            let result = isSelected(x, y);
-            while (!result) {
+            while (isUnselected(x, y)) {
                 // get random number unselected
                 x = getRandomInteger(10)
                 y = getRandomInteger(10)
-                result = isSelected(x,y)
             }
             let hitShip = checkCoordinateIsShip(x, y);
             dispatch(boardClick(x, y, "0", hitShip));
-            setTimeout(function() {
-                //your code to be executed after 1 second
-                let nextTurn = playerTurn === 0 ? 1 : 0;
-                dispatch(switchTurns(nextTurn));
-              }, 2000);
+    
             //console.log("ai played from board.jsx, player is: player ", playerTurn, 'board is:', props.player_id)
           }
         
